@@ -49,7 +49,6 @@ services:
   - type: web
     name: event-management-web
     runtime: static
-    plan: free
     buildCommand: corepack enable && pnpm install --frozen-lockfile && pnpm --filter @event-management/shared run build && pnpm --filter @event-management/web run build
     staticPublishPath: ./apps/web/dist
     headers:
