@@ -1,0 +1,23 @@
+{
+  "name": "@event-management/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist node_modules .turbo"
+  },
+  "dependencies": {
+    "yup": "^1.6.1"
+  },
+  "devDependencies": {
+    "@event-management/eslint-config": "workspace:*",
+    "@event-management/typescript-config": "workspace:*",
+    "eslint": "^9.28.0",
+    "typescript": "^5.7.0"
+  }
+}
