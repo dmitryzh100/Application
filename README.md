@@ -11,7 +11,7 @@ A full-stack Event Management application (PoC) built with React 19, NestJS, and
 
 ## Live Demo
 
-Deployed on Render: https://event-management-web.onrender.com
+Deployed on Render: https://event-management-web-5hdt.onrender.com
 
 > Free-tier services spin down after inactivity — the first request may take 30-60 seconds to wake up.
 

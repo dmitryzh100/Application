@@ -19,7 +19,7 @@ services:
       - key: BACKEND_PORT
         value: "10000"
       - key: CORS_ORIGIN
-        value: https://event-management-web.onrender.com
+        value: https://event-management-web-5hdt.onrender.com
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRES_IN
@@ -58,7 +58,7 @@ services:
     routes:
       - type: rewrite
         source: /api/*
-        destination: https://event-management-api.onrender.com/api/*
+        destination: https://event-management-api-t0tc.onrender.com/api/*
       - type: rewrite
         source: /*
         destination: /index.html
