@@ -1,0 +1,8 @@
+{
+  "name": "@event-management/typescript-config",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "rm -rf node_modules .turbo"
+  }
+}

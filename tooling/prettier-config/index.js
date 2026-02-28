@@ -1,0 +1,28 @@
+module.exports = {
+  semi: true,
+  singleQuote: true,
+  tabWidth: 2,
+  trailingComma: 'all',
+  printWidth: 100,
+  arrowParens: 'always',
+  endOfLine: 'lf',
+  plugins: [
+    require.resolve('@ianvs/prettier-plugin-sort-imports'),
+    require.resolve('prettier-plugin-tailwindcss'),
+  ],
+  importOrder: [
+    '<BUILTIN_MODULES>',
+    '',
+    '^react',
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^@event-management/(.*)$',
+    '',
+    '^@/(.*)$',
+    '',
+    '^[./]',
+  ],
+  importOrderTypeScriptVersion: '5.7.0',
+  importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
+};
