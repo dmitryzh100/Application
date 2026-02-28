@@ -2,7 +2,7 @@ databases:
   - name: event-management-db
     plan: free
     databaseName: event_management
-    user: postgres
+    user: event_management_user
 
 services:
   # ── API (Docker) ──────────────────────────────────────────────
