@@ -1,7 +1,8 @@
-import { useActionState } from 'react';
+import { useActionState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import type { ObjectSchema, ValidationError } from 'yup';
 
 import type { AuthResponse } from '@event-management/shared';
@@ -19,6 +20,7 @@ import { Label } from '@/shared/components/ui/label';
 import { SubmitButton } from '@/shared/components/ui/submit-button';
 import { Typography } from '@/shared/components/ui/typography';
 import { Routes } from '@/shared/constants/routes.constants';
+import { useFormErrorStyles } from '@/shared/hooks/useFormErrorStyles';
 
 import { authKeys } from '../hooks/useAuthQueries';
 import { useAuthStore } from '../stores/auth.store';
@@ -47,12 +49,16 @@ export interface AuthPageConfig {
 
 interface AuthFormState {
   fieldErrors: Record<string, string>;
+  fieldValues: Record<string, string>;
   serverError: string | null;
+  errorTimestamp: number;
 }
 
 const initialState: AuthFormState = {
   fieldErrors: {},
+  fieldValues: {},
   serverError: null,
+  errorTimestamp: 0,
 };
 
 export const AuthPage = ({ config }: { config: AuthPageConfig }): React.ReactElement => {
@@ -79,7 +85,7 @@ export const AuthPage = ({ config }: { config: AuthPageConfig }): React.ReactEle
         }
       }
 
-      return { fieldErrors, serverError: null };
+      return { fieldErrors, fieldValues: data, serverError: null, errorTimestamp: Date.now() };
     }
 
     try {
@@ -94,11 +100,28 @@ export const AuthPage = ({ config }: { config: AuthPageConfig }): React.ReactEle
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
         config.errorFallback;
 
-      return { fieldErrors: {}, serverError: message };
+      return {
+        fieldErrors: {},
+        fieldValues: data,
+        serverError: message,
+        errorTimestamp: Date.now(),
+      };
     }
   };
 
   const [state, action] = useActionState(formAction, initialState);
+  const fieldOrder = useMemo(() => config.fields.map((f) => f.name), [config.fields]);
+
+  const { getErrorClass, hasError, onFieldChange, formRef } = useFormErrorStyles({
+    errors: state.fieldErrors,
+    fieldOrder,
+  });
+
+  useEffect(() => {
+    if (state.serverError) {
+      toast.error(state.serverError, { position: 'top-center' });
+    }
+  }, [state.serverError, state.errorTimestamp]);
 
   return (
     <Card>
@@ -109,26 +132,25 @@ export const AuthPage = ({ config }: { config: AuthPageConfig }): React.ReactEle
         <CardDescription>{config.cardDescription}</CardDescription>
       </CardHeader>
 
-      <form action={action}>
+      <form ref={formRef} action={action}>
         <CardContent className="space-y-4">
-          {state.serverError && (
-            <div role="alert" className="bg-destructive/10 text-destructive rounded-md p-3 text-sm">
-              {state.serverError}
-            </div>
-          )}
-
           {config.fields.map((field) => (
-            <div key={field.name} className="space-y-2">
+            <div key={field.name} className="relative space-y-2 pb-5">
               <Label htmlFor={field.name}>{field.label}</Label>
               <Input
                 id={field.name}
                 name={field.name}
                 type={field.type}
                 placeholder={field.placeholder}
+                defaultValue={state.fieldValues[field.name] ?? ''}
+                className={getErrorClass(field.name)}
+                onChange={() => onFieldChange(field.name)}
               />
 
-              {state.fieldErrors[field.name] && (
-                <Typography variant="error">{state.fieldErrors[field.name]}</Typography>
+              {hasError(field.name) && (
+                <Typography variant="error" className="absolute bottom-0 left-0">
+                  {state.fieldErrors[field.name]}
+                </Typography>
               )}
             </div>
           ))}

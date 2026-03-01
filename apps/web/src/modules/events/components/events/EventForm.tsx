@@ -16,6 +16,7 @@ import { Label } from '@/shared/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/components/ui/radio-group';
 import { Textarea } from '@/shared/components/ui/textarea';
 import { Typography } from '@/shared/components/ui/typography';
+import { useFormErrorStyles } from '@/shared/hooks/useFormErrorStyles';
 
 interface EventFormProps {
   onSubmit: (data: CreateEventFormData) => void | Promise<void>;
@@ -44,54 +45,83 @@ export const EventForm = (props: EventFormProps): React.ReactElement => {
     defaultValues: defaultValues ?? resetEventFormData(),
   });
 
+  const { getErrorClass } = useFormErrorStyles({ errors });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="space-y-2">
+      <div className="relative space-y-2 pb-5">
         <Label htmlFor="title">Event Title *</Label>
-        <Input id="title" placeholder="Enter event title" {...register('title')} />
-        {errors.title && <Typography variant="error">{errors.title.message}</Typography>}
+        <Input
+          id="title"
+          placeholder="Enter event title"
+          className={getErrorClass('title')}
+          {...register('title')}
+        />
+        {errors.title && (
+          <Typography variant="error" className="absolute bottom-0 left-0">
+            {errors.title.message}
+          </Typography>
+        )}
       </div>
 
-      <div className="space-y-2">
+      <div className="relative space-y-2 pb-5">
         <Label htmlFor="description">Description</Label>
         <Textarea
           id="description"
           placeholder="Describe your event"
           rows={4}
+          className={getErrorClass('description')}
           {...register('description')}
         />
         {errors.description && (
-          <Typography variant="error">{errors.description.message}</Typography>
+          <Typography variant="error" className="absolute bottom-0 left-0">
+            {errors.description.message}
+          </Typography>
         )}
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
+        <div className="relative space-y-2 pb-5">
           <Label htmlFor="dateTime">Date & Time *</Label>
           <Input
             id="dateTime"
             type="datetime-local"
             min={format(startOfDay(addDays(new Date(), 1)), "yyyy-MM-dd'T'HH:mm")}
+            className={getErrorClass('dateTime')}
             {...register('dateTime')}
           />
-          {errors.dateTime && <Typography variant="error">{errors.dateTime.message}</Typography>}
+          {errors.dateTime && (
+            <Typography variant="error" className="absolute bottom-0 left-0">
+              {errors.dateTime.message}
+            </Typography>
+          )}
         </div>
 
-        <div className="space-y-2">
+        <div className="relative space-y-2 pb-5">
           <Label htmlFor="location">Location *</Label>
-          <Input id="location" placeholder="Event location" {...register('location')} />
-          {errors.location && <Typography variant="error">{errors.location.message}</Typography>}
+          <Input
+            id="location"
+            placeholder="Event location"
+            className={getErrorClass('location')}
+            {...register('location')}
+          />
+          {errors.location && (
+            <Typography variant="error" className="absolute bottom-0 left-0">
+              {errors.location.message}
+            </Typography>
+          )}
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
+        <div className="relative space-y-2 pb-5">
           <Label htmlFor="capacity">Capacity (optional)</Label>
           <Input
             id="capacity"
             type="number"
             min={minCapacity ?? 1}
             placeholder="Leave empty for unlimited"
+            className={getErrorClass('capacity')}
             {...register('capacity', {
               validate: (value) => {
                 if (minCapacity && value !== null && value !== undefined && value < minCapacity) {
@@ -102,10 +132,14 @@ export const EventForm = (props: EventFormProps): React.ReactElement => {
               },
             })}
           />
-          {errors.capacity && <Typography variant="error">{errors.capacity.message}</Typography>}
+          {errors.capacity && (
+            <Typography variant="error" className="absolute bottom-0 left-0">
+              {errors.capacity.message}
+            </Typography>
+          )}
         </div>
 
-        <div className="space-y-2">
+        <div className="relative space-y-2 pb-5">
           <Label id="visibility-label">Visibility *</Label>
           <Controller
             name="visibility"
@@ -129,7 +163,9 @@ export const EventForm = (props: EventFormProps): React.ReactElement => {
             )}
           />
           {errors.visibility && (
-            <Typography variant="error">{errors.visibility.message}</Typography>
+            <Typography variant="error" className="absolute bottom-0 left-0">
+              {errors.visibility.message}
+            </Typography>
           )}
         </div>
       </div>
