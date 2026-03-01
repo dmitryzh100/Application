@@ -78,7 +78,7 @@ export class EventsService {
     return { data: data.map(serializeEvent), meta };
   }
 
-  async findById(id: string, userId?: string): Promise<Event> {
+  async findById(id: string): Promise<Event> {
     const event = await this.eventRepository.findByIdWithRelations(id);
 
     if (!event) {
@@ -86,15 +86,17 @@ export class EventsService {
       throw new NotFoundException('Event not found');
     }
 
-    if (event.visibility === EventVisibility.PRIVATE && !userId) {
-      throw new UnauthorizedException('Authentication required to view this event');
-    }
-
     return event;
   }
 
   async findOne(id: string, userId?: string): Promise<EventWithDetails> {
-    return serializeEvent(await this.findById(id, userId));
+    const event = await this.findById(id);
+
+    if (event.visibility === EventVisibility.PRIVATE && !userId) {
+      throw new UnauthorizedException('Authentication required to view this event');
+    }
+
+    return serializeEvent(event);
   }
 
   async create(data: CreateEventData, organizerId: string): Promise<EventWithDetails> {
