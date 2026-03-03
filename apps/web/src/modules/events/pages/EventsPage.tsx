@@ -63,7 +63,7 @@ export const EventsPage = (): React.ReactElement => {
   const deferredSearch = useDeferredValue(search);
 
   return (
-    <div className="space-y-6">
+    <div className="flex flex-col gap-4 lg:min-h-0 lg:flex-1">
       <title>Events - Event Management</title>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
