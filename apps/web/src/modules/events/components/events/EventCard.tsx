@@ -57,7 +57,7 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
     <Card
       role="link"
       tabIndex={0}
-      className={`flex cursor-pointer flex-col transition-shadow hover:shadow-md ${isOrganizer ? 'border-primary/40' : ''}`}
+      className={`flex cursor-pointer flex-col overflow-hidden transition-shadow hover:shadow-md ${isOrganizer ? 'border-primary/40' : ''}`}
       onClick={() => navigate(Routes.eventDetails(optimisticEvent.id))}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -66,7 +66,7 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
         }
       }}
     >
-      <CardHeader className="pb-3">
+      <CardHeader className="p-4 pb-2">
         <CardTitle className={`line-clamp-1 text-lg ${isOrganizer ? 'text-primary' : ''}`}>
           {optimisticEvent.title}
         </CardTitle>
@@ -75,7 +75,7 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
         </Typography>
       </CardHeader>
 
-      <CardContent className="flex-1 space-y-2">
+      <CardContent className="flex-1 space-y-1.5 px-4 pb-3 pt-0">
         <div className="text-muted-foreground flex items-center gap-2 text-sm">
           <CalendarDays className="h-4 w-4 shrink-0" aria-hidden="true" />
           <span>{format(new Date(optimisticEvent.dateTime), 'MMM d, yyyy · h:mm a')}</span>
@@ -95,7 +95,7 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
         </div>
       </CardContent>
 
-      <CardFooter className="pt-3" onClick={(e) => e.stopPropagation()}>
+      <CardFooter className="px-4 pb-3 pt-2" onClick={(e) => e.stopPropagation()}>
         <EventsJoinLeaveButton
           event={optimisticEvent}
           size="sm"

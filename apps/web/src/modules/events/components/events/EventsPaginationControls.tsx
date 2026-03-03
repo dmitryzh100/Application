@@ -26,7 +26,7 @@ export const EventsPaginationControls = (
   } = props;
 
   return (
-    <div className="mt-6 flex flex-col items-center gap-4 md:relative md:flex-row md:items-center">
+    <div className="mt-3 flex flex-col items-center gap-4 md:relative md:flex-row md:items-center">
       <div className="order-2 md:order-1">
         <PaginationBar
           currentPage={currentPage}

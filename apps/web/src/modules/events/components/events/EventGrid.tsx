@@ -64,18 +64,20 @@ export const EventGrid = (props: EventGridProps): React.ReactElement => {
   }
 
   return (
-    <div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {pages.map((page, pageIndex) => (
-          <Fragment key={page.pageNumber}>
-            {pageIndex > 0 && (
-              <div id={`events-page-${page.pageNumber}`} className="col-span-full scroll-mt-20" />
-            )}
-            {page.events.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </Fragment>
-        ))}
+    <div className="flex flex-col lg:min-h-0 lg:flex-1">
+      <div className="lg:scrollbar-hidden lg:min-h-0 lg:flex-1 lg:overflow-y-auto">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {pages.map((page, pageIndex) => (
+            <Fragment key={page.pageNumber}>
+              {pageIndex > 0 && (
+                <div id={`events-page-${page.pageNumber}`} className="col-span-full scroll-mt-20" />
+              )}
+              {page.events.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))}
+            </Fragment>
+          ))}
+        </div>
       </div>
 
       <EventsPaginationControls
