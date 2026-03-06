@@ -1,9 +1,7 @@
+import { EventVisibility } from '../enums/event.enum';
 import { UserBase } from './user.types';
 
-export enum EventVisibility {
-  PUBLIC = 'public',
-  PRIVATE = 'private',
-}
+export { EventVisibility };
 
 export interface TagBase {
   id: string;

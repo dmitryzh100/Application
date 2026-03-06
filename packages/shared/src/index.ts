@@ -1,5 +1,6 @@
 export * from './enums/calendar.enum';
 export * from './enums/chat.enum';
+export * from './enums/event.enum';
 export * from './types/user.types';
 export * from './types/event.types';
 export * from './types/api.types';
