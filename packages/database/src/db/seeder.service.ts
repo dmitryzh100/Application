@@ -7,6 +7,7 @@ import {
   DEFAULT_PASSWORD,
   PARTICIPANTS_PER_EVENT_MAX,
   PARTICIPANTS_PER_EVENT_MIN,
+  TAG_NAMES,
   TOTAL_PAST_PRIVATE_EVENTS,
   TOTAL_PAST_PUBLIC_EVENTS,
   TOTAL_PRIVATE_EVENTS,
@@ -18,9 +19,11 @@ import {
   generateEvents,
   generatePastEvents,
   generateUsers,
+  getRandomElements,
 } from '../../seeds/helpers/seed.helpers';
 import { Event } from '../entities/event.entity';
 import { Participant } from '../entities/participant.entity';
+import { Tag } from '../entities/tag.entity';
 import { User } from '../entities/user.entity';
 
 @Injectable()
@@ -31,6 +34,7 @@ export class SeederService implements OnModuleInit {
     @InjectRepository(User) private readonly userRepo: Repository<User>,
     @InjectRepository(Event) private readonly eventRepo: Repository<Event>,
     @InjectRepository(Participant) private readonly participantRepo: Repository<Participant>,
+    @InjectRepository(Tag) private readonly tagRepo: Repository<Tag>,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -84,7 +88,25 @@ export class SeederService implements OnModuleInit {
 
     this.logger.log(`Created ${pastEvents.length} past events`);
 
+    const tags: Tag[] = [];
+
+    for (const name of TAG_NAMES) {
+      const tag = await this.tagRepo.save(this.tagRepo.create({ name }));
+      tags.push(tag);
+    }
+
+    this.logger.log(`Created ${tags.length} tags`);
+
     const allEvents = [...events, ...pastEvents];
+
+    for (const event of allEvents) {
+      const tagCount = Math.floor(Math.random() * 3) + 1;
+      event.tags = getRandomElements(tags, tagCount);
+      await this.eventRepo.save(event);
+    }
+
+    this.logger.log('Assigned tags to events');
+
     const assignments = buildParticipantAssignments(
       users.map((u) => u.id),
       allEvents.map((e) => ({ id: e.id, organizerId: e.organizerId, capacity: e.capacity })),

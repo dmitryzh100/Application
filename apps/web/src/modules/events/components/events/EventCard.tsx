@@ -1,4 +1,4 @@
-import { useOptimistic } from 'react';
+import { memo, useOptimistic } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { format } from 'date-fns';
@@ -7,6 +7,8 @@ import { CalendarDays, MapPin, Users } from 'lucide-react';
 import type { EventWithDetails } from '@event-management/shared';
 
 import { useAuthStore } from '@/modules/auth';
+import { getTagBadgeClasses } from '@/modules/tags';
+import { Badge } from '@/shared/components/ui/badge';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { Typography } from '@/shared/components/ui/typography';
 import { Routes } from '@/shared/constants/routes.constants';
@@ -43,7 +45,7 @@ function applyOptimisticUpdate(
   };
 }
 
-export const EventCard = (props: EventCardProps): React.ReactElement => {
+export const EventCard = memo(function EventCard(props: EventCardProps): React.ReactElement {
   const { event } = props;
   const navigate = useNavigate();
 
@@ -93,6 +95,19 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
             {optimisticEvent.capacity ? ` / ${optimisticEvent.capacity}` : ''} participants
           </span>
         </div>
+
+        {optimisticEvent.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-1 pt-1">
+            {optimisticEvent.tags.map((tag) => (
+              <Badge
+                key={tag.id}
+                className={`px-1.5 py-0 text-[10px] ${getTagBadgeClasses(tag.name)}`}
+              >
+                {tag.name}
+              </Badge>
+            ))}
+          </div>
+        )}
       </CardContent>
 
       <CardFooter className="px-4 pb-3 pt-2" onClick={(e) => e.stopPropagation()}>
@@ -104,4 +119,4 @@ export const EventCard = (props: EventCardProps): React.ReactElement => {
       </CardFooter>
     </Card>
   );
-};
+});

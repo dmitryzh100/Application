@@ -13,19 +13,14 @@ interface GetAllParams {
   search?: string;
   page?: number;
   limit?: number;
+  tagIds?: string[];
 }
 
 export const eventsApi = {
   getAll: async (params: GetAllParams = {}): Promise<PaginatedResponse<EventWithDetails>> => {
-    const queryParams: Record<string, string | number> = {};
-
-    if (params.search) queryParams.search = params.search;
-    if (params.page) queryParams.page = params.page;
-    if (params.limit) queryParams.limit = params.limit;
-
     const response = await apiClient.get<ApiResponse<PaginatedResponse<EventWithDetails>>>(
       Api.events.base,
-      { params: queryParams },
+      { params, paramsSerializer: { indexes: null } },
     );
 
     return response.data.data;

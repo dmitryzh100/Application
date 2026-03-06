@@ -19,8 +19,10 @@ import { eventsApi } from '../api/events.api';
 
 export const eventKeys = {
   all: ['events'] as const,
-  list: (search?: string, startPage?: number) => [...eventKeys.all, { search, startPage }] as const,
-  page: (search?: string, page?: number) => [...eventKeys.all, 'page', { search, page }] as const,
+  list: (search?: string, startPage?: number, tagIds?: string[]) =>
+    [...eventKeys.all, { search, startPage, tagIds }] as const,
+  page: (search?: string, page?: number, tagIds?: string[]) =>
+    [...eventKeys.all, 'page', { search, page, tagIds }] as const,
   detail: (id: string) => [...eventKeys.all, id] as const,
   my: (month: number, year: number) => ['my-events', { month, year }] as const,
 };
@@ -71,24 +73,25 @@ export function useEventSuspense(
 export function useInfiniteEventsSuspense(
   search?: string,
   startPage: number = 1,
+  tagIds?: string[],
 ): ReturnType<typeof useSuspenseInfiniteQuery<PaginatedResponse<EventWithDetails>, Error>> {
   const queryClient = useQueryClient();
 
   return useSuspenseInfiniteQuery<PaginatedResponse<EventWithDetails>, Error>({
-    queryKey: eventKeys.list(search, startPage),
+    queryKey: eventKeys.list(search, startPage, tagIds),
     queryFn: async ({ pageParam }) => {
       const pageNumber = pageParam as number;
       const prefetched = queryClient.getQueryData<PaginatedResponse<EventWithDetails>>(
-        eventKeys.page(search, pageNumber),
+        eventKeys.page(search, pageNumber, tagIds),
       );
 
       if (prefetched) {
-        queryClient.removeQueries({ queryKey: eventKeys.page(search, pageNumber) });
+        queryClient.removeQueries({ queryKey: eventKeys.page(search, pageNumber, tagIds) });
 
         return prefetched;
       }
 
-      return eventsApi.getAll({ search, page: pageNumber });
+      return eventsApi.getAll({ search, page: pageNumber, tagIds });
     },
     initialPageParam: startPage,
     getNextPageParam: (lastPage) => (lastPage.meta.hasMore ? lastPage.meta.page + 1 : undefined),
@@ -99,6 +102,7 @@ export function usePrefetchNextEventsPage(
   search: string | undefined,
   pages: PaginatedResponse<EventWithDetails>[],
   hasNextPage: boolean,
+  tagIds?: string[],
 ): void {
   const queryClient = useQueryClient();
 
@@ -111,10 +115,10 @@ export function usePrefetchNextEventsPage(
     const nextPage = lastPage.meta.page + 1;
 
     queryClient.prefetchQuery({
-      queryKey: eventKeys.page(search, nextPage),
-      queryFn: () => eventsApi.getAll({ search, page: nextPage }),
+      queryKey: eventKeys.page(search, nextPage, tagIds),
+      queryFn: () => eventsApi.getAll({ search, page: nextPage, tagIds }),
     });
-  }, [queryClient, search, pages, hasNextPage]);
+  }, [queryClient, search, pages, hasNextPage, tagIds]);
 }
 
 export function useMyEvents(

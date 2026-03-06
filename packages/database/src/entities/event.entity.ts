@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -10,6 +12,7 @@ import {
 } from 'typeorm';
 
 import { Participant } from './participant.entity';
+import { Tag } from './tag.entity';
 import { User } from './user.entity';
 
 export enum EventVisibility {
@@ -53,6 +56,14 @@ export class Event {
 
   @OneToMany(() => Participant, (participant) => participant.event, { cascade: true })
   participants!: Participant[];
+
+  @ManyToMany(() => Tag, { cascade: true, eager: false })
+  @JoinTable({
+    name: 'event_tags',
+    joinColumn: { name: 'event_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'tag_id', referencedColumnName: 'id' },
+  })
+  tags!: Tag[];
 
   @CreateDateColumn()
   createdAt!: Date;

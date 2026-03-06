@@ -33,6 +33,7 @@ interface CreateEventDto {
   location: string;
   capacity?: number | null;
   visibility: string;
+  tagIds?: string[];
 }
 
 interface UpdateEventDto {
@@ -42,6 +43,7 @@ interface UpdateEventDto {
   location?: string;
   capacity?: number | null;
   visibility?: string;
+  tagIds?: string[];
 }
 
 @ApiTags('Events')
@@ -65,13 +67,17 @@ export class EventsController {
     type: Number,
     description: 'Items per page (default: 9, max: 50)',
   })
+  @ApiQuery({ name: 'tagIds', required: false, type: [String], description: 'Filter by tag IDs' })
   async findAll(
     @Query('search') search?: string,
     @Query('page') page?: string,
     @Query('limit') limit?: string,
+    @Query('tagIds') tagIds?: string | string[],
     @CurrentUser() user?: User,
   ): Promise<PaginatedResponse<EventWithDetails>> {
-    return this.eventsService.findEvents(search, user?.id, page, limit);
+    const parsedTagIds = tagIds ? (Array.isArray(tagIds) ? tagIds : [tagIds]) : undefined;
+
+    return this.eventsService.findEvents(search, user?.id, page, limit, parsedTagIds);
   }
 
   @Get(':id')

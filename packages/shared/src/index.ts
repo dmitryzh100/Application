@@ -1,3 +1,4 @@
+export * from './enums/calendar.enum';
 export * from './types/user.types';
 export * from './types/event.types';
 export * from './types/api.types';

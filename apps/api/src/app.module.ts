@@ -7,10 +7,11 @@ import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import { AuthModule } from '@/modules/auth/auth.module';
 import { EventsModule } from '@/modules/events/events.module';
+import { TagsModule } from '@/modules/tags/tags.module';
 import { UsersModule } from '@/modules/users/users.module';
 
 @Module({
-  imports: [DatabaseModule, AuthModule, UsersModule, EventsModule],
+  imports: [DatabaseModule, AuthModule, UsersModule, EventsModule, TagsModule],
   providers: [
     {
       provide: APP_FILTER,

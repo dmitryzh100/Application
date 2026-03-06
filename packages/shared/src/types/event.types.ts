@@ -5,6 +5,11 @@ export enum EventVisibility {
   PRIVATE = 'private',
 }
 
+export interface TagBase {
+  id: string;
+  name: string;
+}
+
 export interface EventBase {
   id: string;
   title: string;
@@ -23,6 +28,7 @@ export interface EventWithDetails extends EventBase {
   participants: ParticipantInfo[];
   participantCount: number;
   isJoined?: boolean;
+  tags: TagBase[];
 }
 
 export interface ParticipantInfo {
@@ -39,6 +45,7 @@ export interface CreateEventRequest {
   location: string;
   capacity?: number | null;
   visibility: EventVisibility;
+  tagIds?: string[];
 }
 
 export interface UpdateEventRequest {
@@ -48,20 +55,17 @@ export interface UpdateEventRequest {
   location?: string;
   capacity?: number | null;
   visibility?: EventVisibility;
+  tagIds?: string[];
 }
 
 export interface EventsQueryParams {
   search?: string;
   page?: number;
   limit?: number;
+  tagIds?: string[];
 }
 
 export interface MyEventsQueryParams {
   month?: number;
   year?: number;
-}
-
-export enum ViewMode {
-  MONTH = 'month',
-  WEEK = 'week',
 }

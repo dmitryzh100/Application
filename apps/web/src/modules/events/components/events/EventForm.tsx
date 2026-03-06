@@ -10,6 +10,7 @@ import {
 } from '@event-management/shared';
 
 import { resetEventFormData } from '@/modules/events/utils/form.utils';
+import { TagMultiSelect } from '@/modules/tags/components/TagMultiSelect';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
@@ -168,6 +169,22 @@ export const EventForm = (props: EventFormProps): React.ReactElement => {
             </Typography>
           )}
         </div>
+      </div>
+
+      <div className="relative space-y-2 pb-5">
+        <Label>Tags (optional, max 5)</Label>
+        <Controller
+          name="tagIds"
+          control={control}
+          render={({ field }) => (
+            <TagMultiSelect value={field.value ?? []} onChange={field.onChange} />
+          )}
+        />
+        {errors.tagIds && (
+          <Typography variant="error" className="absolute bottom-0 left-0">
+            {errors.tagIds.message}
+          </Typography>
+        )}
       </div>
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { Search } from 'lucide-react';
 
 import { Input } from '@/shared/components/ui/input';
@@ -7,7 +9,9 @@ interface SearchBarProps {
   onChange: (value: string) => void;
 }
 
-export const EventsSearchBar = (props: SearchBarProps): React.ReactElement => {
+export const EventsSearchBar = memo(function EventsSearchBar(
+  props: SearchBarProps,
+): React.ReactElement {
   const { value, onChange } = props;
 
   return (
@@ -24,4 +28,4 @@ export const EventsSearchBar = (props: SearchBarProps): React.ReactElement => {
       />
     </div>
   );
-};
+});

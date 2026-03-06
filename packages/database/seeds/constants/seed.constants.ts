@@ -61,6 +61,19 @@ export const PAST_EVENT_TITLES = [
   'Database Optimization Seminar',
 ];
 
+export const TAG_NAMES = [
+  'tech',
+  'art',
+  'business',
+  'music',
+  'design',
+  'science',
+  'networking',
+  'workshop',
+  'health',
+  'education',
+];
+
 export const PAST_EVENT_DESCRIPTIONS = [
   'A thorough review of core JavaScript concepts including closures, prototypes, and async patterns.',
   'Hands-on workshop on containerizing applications with Docker and orchestrating with Docker Compose.',

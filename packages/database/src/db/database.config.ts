@@ -2,6 +2,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 import { Event } from '../entities/event.entity';
 import { Participant } from '../entities/participant.entity';
+import { Tag } from '../entities/tag.entity';
 import { User } from '../entities/user.entity';
 
 export function getDatabaseConfig(): TypeOrmModuleOptions {
@@ -14,7 +15,7 @@ export function getDatabaseConfig(): TypeOrmModuleOptions {
     username: process.env.DB_USERNAME || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
     database: process.env.DB_NAME || 'event_management',
-    entities: [User, Event, Participant],
+    entities: [User, Event, Participant, Tag],
     synchronize: true,
     ssl: isProduction ? { rejectUnauthorized: false } : false,
   };
