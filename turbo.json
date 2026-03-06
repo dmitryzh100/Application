@@ -23,5 +23,22 @@
       "cache": false
     }
   },
-  "globalEnv": ["NODE_ENV", "VITE_API_URL"]
+  "globalEnv": [
+    "NODE_ENV",
+    "VITE_API_URL",
+    "DB_HOST",
+    "DB_PORT",
+    "DB_USERNAME",
+    "DB_PASSWORD",
+    "DB_NAME",
+    "JWT_SECRET",
+    "JWT_EXPIRES_IN",
+    "GROQ_API_KEY",
+    "GROQ_MODEL",
+    "GROQ_MAX_TOKENS",
+    "GROQ_TEMPERATURE",
+    "GROQ_MAX_INPUT_TOKENS",
+    "BACKEND_PORT",
+    "CORS_ORIGIN"
+  ]
 }

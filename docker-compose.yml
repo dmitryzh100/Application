@@ -28,6 +28,11 @@ services:
       JWT_SECRET: super-secret-jwt-key-change-in-production
       JWT_EXPIRES_IN: 7d
       BACKEND_PORT: 3000
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_MODEL: ${GROQ_MODEL:-llama-3.3-70b-versatile}
+      GROQ_MAX_TOKENS: ${GROQ_MAX_TOKENS:-1024}
+      GROQ_TEMPERATURE: ${GROQ_TEMPERATURE:-0.7}
+      GROQ_MAX_INPUT_TOKENS: ${GROQ_MAX_INPUT_TOKENS:-4096}
       CORS_ORIGIN: http://localhost
     ports:
       - "3000:3000"
