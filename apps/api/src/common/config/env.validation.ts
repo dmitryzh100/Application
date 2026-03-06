@@ -21,6 +21,26 @@ const envSchema = yup.object({
   DB_USERNAME: yup.string().default('postgres'),
   DB_PASSWORD: yup.string().default('postgres'),
   DB_NAME: yup.string().default('event_management'),
+  GROQ_API_KEY: yup.string().optional(),
+  GROQ_MODEL: yup.string().default('llama-3.3-70b-versatile'),
+  GROQ_MAX_TOKENS: yup
+    .number()
+    .integer()
+    .positive()
+    .default(1024)
+    .transform((value, original) => (original === '' ? undefined : value)),
+  GROQ_TEMPERATURE: yup
+    .number()
+    .min(0)
+    .max(2)
+    .default(0.7)
+    .transform((value, original) => (original === '' ? undefined : value)),
+  GROQ_MAX_INPUT_TOKENS: yup
+    .number()
+    .integer()
+    .positive()
+    .default(4096)
+    .transform((value, original) => (original === '' ? undefined : value)),
 });
 
 export type EnvConfig = yup.InferType<typeof envSchema>;

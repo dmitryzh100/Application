@@ -6,12 +6,13 @@ import { DatabaseModule } from '@event-management/database';
 import { AllExceptionsFilter } from '@/common/filters/all-exceptions.filter';
 import { TransformInterceptor } from '@/common/interceptors/transform.interceptor';
 import { AuthModule } from '@/modules/auth/auth.module';
+import { ChatModule } from '@/modules/chat/chat.module';
 import { EventsModule } from '@/modules/events/events.module';
 import { TagsModule } from '@/modules/tags/tags.module';
 import { UsersModule } from '@/modules/users/users.module';
 
 @Module({
-  imports: [DatabaseModule, AuthModule, UsersModule, EventsModule, TagsModule],
+  imports: [DatabaseModule, AuthModule, UsersModule, EventsModule, TagsModule, ChatModule],
   providers: [
     {
       provide: APP_FILTER,

@@ -33,6 +33,10 @@ const MyEventsPage = withLazyLoad(
   () => import('@/modules/events/pages/my-events'),
   (m) => m.MyEventsPage,
 );
+const ChatPage = withLazyLoad(
+  () => import('@/modules/chat/pages/ChatPage'),
+  (m) => m.ChatPage,
+);
 
 export const AppRoutes = (): ReactElement => {
   return (
@@ -50,6 +54,7 @@ export const AppRoutes = (): ReactElement => {
           <Route path={Routes.eventCreate} element={<CreateEventPage />} />
           <Route path={Routes.eventEdit()} element={<EditEventPage />} />
           <Route path={Routes.myEvents} element={<MyEventsPage />} />
+          <Route path={Routes.chat} element={<ChatPage />} />
         </Route>
       </Route>
 
