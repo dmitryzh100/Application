@@ -24,6 +24,11 @@ const capacityField = yup
   .transform((value, original) => (original === '' || original === undefined ? null : value))
   .min(1, 'Capacity must be at least 1');
 const visibilityField = yup.string().oneOf(Object.values(EventVisibility), 'Invalid visibility');
+const tagIdsField = yup
+  .array()
+  .of(yup.string().required())
+  .max(5, 'Maximum 5 tags allowed')
+  .default([]);
 
 const baseEventSchema = yup.object({
   title: titleField,
@@ -32,6 +37,7 @@ const baseEventSchema = yup.object({
   location: locationField,
   capacity: capacityField,
   visibility: visibilityField,
+  tagIds: tagIdsField,
 });
 
 export const createEventSchema = baseEventSchema.shape({

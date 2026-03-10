@@ -6,4 +6,5 @@ export const Routes = {
   eventCreate: '/events/create',
   eventEdit: (id?: string): string => `/events/${id ?? ':id'}/edit`,
   myEvents: '/my-events',
+  chat: '/chat',
 } as const;

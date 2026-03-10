@@ -47,6 +47,10 @@ export abstract class BaseRepository<T extends ObjectLiteral> {
     return updated;
   }
 
+  async save(entity: T): Promise<T> {
+    return await this.repository.save(entity);
+  }
+
   async delete(where: FindOptionsWhere<T>): Promise<void> {
     await this.repository.delete(where);
   }

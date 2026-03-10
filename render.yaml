@@ -44,6 +44,16 @@ services:
         fromDatabase:
           name: event-management-db
           property: database
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
+      - key: GROQ_MAX_TOKENS
+        value: "1024"
+      - key: GROQ_TEMPERATURE
+        value: "0.7"
+      - key: GROQ_MAX_INPUT_TOKENS
+        value: "4096"
 
   # ── Frontend (Static Site) ────────────────────────────────────
   - type: web

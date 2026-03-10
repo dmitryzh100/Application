@@ -2,13 +2,15 @@ import { Suspense, useOptimistic, useState, useTransition } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { format } from 'date-fns';
-import { ArrowLeft, CalendarDays, Edit, MapPin, Trash2, Users } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Edit, MapPin, Tag, Trash2, Users } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { getDisplayName, isPastEvent, type EventWithDetails } from '@event-management/shared';
 
 import { useAuthStore } from '@/modules/auth';
+import { getTagBadgeClasses } from '@/modules/tags';
 import { AuthErrorBoundary } from '@/shared/components/app/AuthErrorBoundary';
+import { Badge } from '@/shared/components/ui/badge';
 import { Button } from '@/shared/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/components/ui/card';
 import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
@@ -136,6 +138,19 @@ const EventDetailsContent = (props: { id: string }): React.ReactElement => {
               </span>
             </div>
           </div>
+
+          {displayEvent.tags?.length > 0 && (
+            <div className="flex items-center gap-2">
+              <Tag className="text-primary h-4 w-4 shrink-0" aria-hidden="true" />
+              <div className="flex flex-wrap gap-1.5">
+                {displayEvent.tags.map((t) => (
+                  <Badge key={t.id} className={getTagBadgeClasses(t.name)}>
+                    {t.name}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="flex items-center gap-4">
             <EventsJoinLeaveButton event={displayEvent} onOptimisticUpdate={addOptimistic} />

@@ -11,6 +11,12 @@ export const Api = {
     join: (id: string): string => `/events/${id}/join`,
     leave: (id: string): string => `/events/${id}/leave`,
   },
+  chat: {
+    base: '/chat',
+  },
+  tags: {
+    base: '/tags',
+  },
   users: {
     myEvents: '/users/me/events',
   },

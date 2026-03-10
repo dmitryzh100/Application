@@ -30,5 +30,6 @@ export function serializeEvent(event: Event): EventWithDetails {
       : { id: event.organizerId, name: '', email: '', createdAt: '' },
     participants,
     participantCount: participants.length,
+    tags: (event.tags ?? []).map((t) => ({ id: t.id, name: t.name })),
   };
 }

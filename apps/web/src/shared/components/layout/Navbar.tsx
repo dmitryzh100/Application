@@ -1,7 +1,7 @@
 import { useState, useTransition } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { CalendarDays, List, LogOut, Menu, Plus, User } from 'lucide-react';
+import { Bot, CalendarDays, List, LogOut, Menu, Plus, User } from 'lucide-react';
 
 import { useAuthStore, useLogout } from '@/modules/auth';
 import { Routes } from '@/shared/constants/routes.constants';
@@ -42,13 +42,23 @@ export const Navbar = (): React.ReactElement => {
           </Link>
 
           {isAuthenticated && (
-            <Link
-              to={Routes.myEvents}
-              className="hover:text-primary ml-4 flex items-center gap-2 text-sm font-medium transition-colors"
-            >
-              <CalendarDays className="h-4 w-4" aria-hidden="true" />
-              My Events
-            </Link>
+            <>
+              <Link
+                to={Routes.myEvents}
+                className="hover:text-primary ml-4 flex items-center gap-2 text-sm font-medium transition-colors"
+              >
+                <CalendarDays className="h-4 w-4" aria-hidden="true" />
+                My Events
+              </Link>
+
+              <Link
+                to={Routes.chat}
+                className="hover:text-primary ml-4 flex items-center gap-2 text-sm font-medium transition-colors"
+              >
+                <Bot className="h-4 w-4" aria-hidden="true" />
+                AI Assistant
+              </Link>
+            </>
           )}
         </div>
 
@@ -123,6 +133,15 @@ export const Navbar = (): React.ReactElement => {
                   >
                     <CalendarDays className="mr-2 h-4 w-4" aria-hidden="true" />
                     My Events
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    className="justify-start"
+                    onClick={() => handleNavigate(Routes.chat)}
+                  >
+                    <Bot className="mr-2 h-4 w-4" aria-hidden="true" />
+                    AI Assistant
                   </Button>
 
                   <Button

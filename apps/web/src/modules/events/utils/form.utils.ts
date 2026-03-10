@@ -14,6 +14,7 @@ export function resetEventFormData(): CreateEventFormData {
     location: '',
     capacity: undefined,
     visibility: EventVisibility.PUBLIC,
+    tagIds: [],
   };
 }
 
@@ -25,5 +26,6 @@ export function mapEventToFormData(event: EventWithDetails): CreateEventFormData
     location: event.location,
     capacity: event.capacity ?? undefined,
     visibility: event.visibility,
+    tagIds: event.tags.map((t) => t.id),
   };
 }

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { Button } from '@/shared/components/ui/button';
 import { LoadingSpinner } from '@/shared/components/ui/loading-spinner';
 import { PaginationBar } from '@/shared/components/ui/pagination';
@@ -12,9 +14,9 @@ interface EventsPaginationControlsProps {
   onLoadMore: () => void;
 }
 
-export const EventsPaginationControls = (
+export const EventsPaginationControls = memo(function EventsPaginationControls(
   props: EventsPaginationControlsProps,
-): React.ReactElement => {
+): React.ReactElement {
   const {
     currentPage,
     totalPages,
@@ -47,4 +49,4 @@ export const EventsPaginationControls = (
       </div>
     </div>
   );
-};
+});

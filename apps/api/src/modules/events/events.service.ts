@@ -11,6 +11,7 @@ import {
   EventRepository,
   EventVisibility,
   ParticipantRepository,
+  TagRepository,
   type Event,
 } from '@event-management/database';
 import type { EventWithDetails, PaginatedResponse, PaginationMeta } from '@event-management/shared';
@@ -24,6 +25,7 @@ interface CreateEventData {
   location: string;
   capacity?: number | null;
   visibility: string;
+  tagIds?: string[];
 }
 
 interface UpdateEventData {
@@ -33,6 +35,7 @@ interface UpdateEventData {
   location?: string;
   capacity?: number | null;
   visibility?: string;
+  tagIds?: string[];
 }
 
 const DEFAULT_PAGE = 1;
@@ -46,6 +49,7 @@ export class EventsService {
   constructor(
     private readonly eventRepository: EventRepository,
     private readonly participantRepository: ParticipantRepository,
+    private readonly tagRepository: TagRepository,
   ) {}
 
   async findEvents(
@@ -53,13 +57,14 @@ export class EventsService {
     userId?: string,
     page?: string,
     limit?: string,
+    tagIds?: string[],
   ): Promise<PaginatedResponse<EventWithDetails>> {
     const pageNum = page ? parseInt(page, 10) : DEFAULT_PAGE;
     const limitNum = limit ? parseInt(limit, 10) : DEFAULT_LIMIT;
     const clampedPage = Math.max(1, pageNum);
     const clampedLimit = Math.min(MAX_LIMIT, Math.max(1, limitNum));
 
-    const params = { search, page: clampedPage, limit: clampedLimit };
+    const params = { search, page: clampedPage, limit: clampedLimit, tagIds };
 
     const { data, total } = userId
       ? await this.eventRepository.findAllEvents(params)
@@ -100,6 +105,8 @@ export class EventsService {
   }
 
   async create(data: CreateEventData, organizerId: string): Promise<EventWithDetails> {
+    const tags = data.tagIds?.length ? await this.tagRepository.findByIds(data.tagIds) : [];
+
     const saved = await this.eventRepository.create({
       title: data.title,
       description: data.description || '',
@@ -108,6 +115,7 @@ export class EventsService {
       capacity: data.capacity ?? null,
       visibility: data.visibility as EventVisibility,
       organizerId,
+      tags,
     });
 
     return serializeEvent(await this.findById(saved.id));
@@ -141,6 +149,13 @@ export class EventsService {
     };
 
     await this.eventRepository.update(id, updateData);
+
+    if (data.tagIds !== undefined) {
+      const tags = data.tagIds.length ? await this.tagRepository.findByIds(data.tagIds) : [];
+      const updated = await this.findById(id);
+      updated.tags = tags;
+      await this.eventRepository.save(updated);
+    }
 
     return serializeEvent(await this.findById(id));
   }
